@@ -1,0 +1,30 @@
+/* Resetting the app to take up the full screen */
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f4f7f6; /* Professional background color */
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensuring Bootstrap containers are wide on PC but have padding */
+.container {
+  max-width: 1400px !important; /* Professional width for PC */
+}
+
+/* Smooth transitions for a "Web App" feel */
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
