@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import { auth, db } from './firebase'; // Added db import
+import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { doc, onSnapshot } from 'firebase/firestore'; // Added Firestore functions
+import { doc, onSnapshot } from 'firebase/firestore';
 
 // Import All Pages
 import Home from './pages/Home';
@@ -15,29 +15,35 @@ import Chat from './pages/Chat';
 import ItemDetails from './pages/ItemDetails';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import logo from './logo/Zyra1.png';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
+
 
 function App() {
   const [user, setUser] = useState(null);
-  const [isVerified, setIsVerified] = useState(false); // New state for verification
+  const [isVerified, setIsVerified] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false); 
   const [loading, setLoading] = useState(true);
 
-  // Monitor Authentication and Verification State
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       
       if (currentUser) {
-        // Real-time listener for the user's Firestore document
         const userDocRef = doc(db, "users", currentUser.uid);
         const unsubDoc = onSnapshot(userDocRef, (docSnap) => {
           if (docSnap.exists()) {
-            setIsVerified(docSnap.data().isVerified || false);
+            const data = docSnap.data();
+            setIsVerified(data.isVerified || false);
+            setIsAdmin(data.role === 'admin'); 
           }
           setLoading(false);
         });
         return () => unsubDoc();
       } else {
         setIsVerified(false);
+        setIsAdmin(false);
         setLoading(false);
       }
     });
@@ -47,7 +53,6 @@ function App() {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      alert("Logged out successfully");
     } catch (error) {
       console.error("Logout Error:", error);
     }
@@ -65,33 +70,49 @@ function App() {
 
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
-        <div className="container-fluid px-lg-5">
-          <Link className="navbar-brand fw-bold fs-3 text-primary" to="/">ZYRA</Link>
-          
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top p-0"> {/* Added p-0 here */}
+<div className="container-fluid px-lg-5">
+<Link
+className="navbar-brand d-flex align-items-center fw-bold fs-3 text-primary m-0 p-0"
+to="/"
+style={{ lineHeight: '0' }} // Prevents text-based spacing
+>
+<img
+src={logo}
+alt="Zyra Logo"
+style={{
+height: '80px', // Increase this to make the logo fill the whole bar height
+width: '60px',
+objectFit: 'contain',
+margin: '0', // Forced zero margin
+padding: '0', // Forced zero padding
+display: 'block'
+}}
+/>
+<span className="ms-2"></span>
+</Link>
+
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#zyraNav">
             <span className="navbar-toggler-icon"></span>
           </button>
-          
+
           <div className="collapse navbar-collapse" id="zyraNav">
             <div className="navbar-nav ms-auto align-items-center">
               <Link className="nav-link px-3" to="/marketplace">Browse Items</Link>
-              
               {user ? (
                 <>
                   <Link className="nav-link px-3" to="/add-listing">List an Item</Link>
                   <Link className="nav-link px-3" to="/dashboard">My Dashboard</Link>
-                  <Link className="nav-link px-3 text-warning" to="/admin">Admin</Link>
                   
-                  {/* DYNAMIC VERIFICATION BUTTON/TICK */}
+                  {isAdmin && (
+                    <Link className="nav-link px-3 text-warning fw-bold" to="/admin">Admin Panel</Link>
+                  )}
+                  
                   {!isVerified ? (
                     <Link className="btn btn-outline-primary btn-sm ms-lg-3 px-3" to="/verify">Verify CNIC</Link>
                   ) : (
-                    <span className="badge bg-success ms-lg-3 px-3 py-2 rounded-pill shadow-sm">
-                      ✅ Verified Vendor
-                    </span>
+                    <span className="badge bg-success ms-lg-3 px-3 py-2 rounded-pill shadow-sm">✅ Verified</span>
                   )}
-                  
                   <button className="btn btn-link nav-link text-danger ms-2" onClick={handleLogout}>Logout</button>
                 </>
               ) : (
@@ -115,23 +136,13 @@ function App() {
           <Route path="/add-listing" element={user ? <AddListing /> : <Navigate to="/login" />} />
           <Route path="/verify" element={user ? <VerifyIdentity /> : <Navigate to="/login" />} />
           <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
-          <Route path="/admin" element={user ? <AdminPanel /> : <Navigate to="/login" />} />
+          <Route path="/admin" element={user && isAdmin ? <AdminPanel /> : <Navigate to="/" />} />
           <Route path="/chat/:chatId" element={user ? <Chat /> : <Navigate to="/login" />} />
         </Routes>
       </main>
 
-      <footer className="bg-white border-top py-5 mt-5">
-        <div className="container-fluid px-lg-5">
-          <div className="row">
-            <div className="col-md-6 text-center text-md-start">
-              <h5 className="fw-bold text-primary">ZYRA</h5>
-              <p className="text-muted small">Secure Peer-to-Peer Rental Machinery & Equipment Platform.<br/>University of Gujrat FYP Project 2026.</p>
-            </div>
-            <div className="col-md-6 text-center text-md-end">
-              <p className="text-muted mb-0">© 2026 Zyra Platform. All rights reserved.</p>
-            </div>
-          </div>
-        </div>
+      <footer className="bg-white border-top py-4 mt-5 text-center">
+        <p className="text-muted small mb-0">© 2026 Zyra Platform. University of Gujrat FYP.</p>
       </footer>
     </Router>
   );

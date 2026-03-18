@@ -1,106 +1,159 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { db, storage, auth } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 const VerifyIdentity = () => {
   const [cnic, setCnic] = useState('');
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
- const handleVerify = async (e) => {
-  e.preventDefault();
-  setLoading(true);
+  // Handle Image Selection & Preview
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
-  try {
-    // 1. Check Auth again
-    const user = auth.currentUser;
-    if (!user) throw new Error("User session expired. Please login again.");
-
-    // 2. Upload Image (You said this part is working)
-    const storageRef = ref(storage, `verifications/${user.uid}`);
-    await uploadBytes(storageRef, image);
-    const downloadURL = await getDownloadURL(storageRef);
-
-    // 3. Update Firestore (The likely crash point)
-    const userRef = doc(db, "users", user.uid);
+  const handleVerify = async (e) => {
+    e.preventDefault();
     
-    await updateDoc(userRef, {
-      cnic: cnic,
-      cnicImageUrl: downloadURL,
-      verificationStatus: "pending", // Ensure this matches your Admin Panel logic
-      isVerified: false
-    }).catch(async (error) => {
-      // If updateDoc fails because the document doesn't exist, use setDoc instead
-      if (error.code === 'not-found') {
-        const { setDoc } = await import("firebase/firestore");
+    // CNIC Validation: Must be 13 digits
+    if (cnic.length !== 13 || isNaN(cnic)) {
+      return alert("Please enter a valid 13-digit CNIC number without dashes.");
+    }
+
+    setLoading(true);
+
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("User session expired. Please login again.");
+
+      // 1. Upload CNIC Image
+      const storageRef = ref(storage, `verifications/${user.uid}_${Date.now()}`);
+      await uploadBytes(storageRef, image);
+      const downloadURL = await getDownloadURL(storageRef);
+
+      // 2. Reference the User Document
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+
+      const verificationData = {
+        cnic: cnic,
+        cnicImageUrl: downloadURL,
+        verificationStatus: "pending",
+        isVerified: false,
+        submittedAt: serverTimestamp()
+      };
+
+      // 3. Smart Write: Create or Update
+      if (userSnap.exists()) {
+        await updateDoc(userRef, verificationData);
+      } else {
         await setDoc(userRef, {
           uid: user.uid,
           email: user.email,
-          cnic: cnic,
-          cnicImageUrl: downloadURL,
-          verificationStatus: "pending",
-          isVerified: false
+          displayName: user.displayName || "Zyra User",
+          ...verificationData
         });
-      } else {
-        throw error;
       }
-    });
 
-    alert("CNIC Submitted Successfully!");
-    navigate('/dashboard');
+      alert("CNIC Submitted! Our team will review your identity shortly.");
+      navigate('/dashboard');
 
-  } catch (error) {
-    console.error("Full Error Object:", error);
-    // This alert helps us see the REAL error, not just "No Internet"
-    alert("System Error: " + error.message);
-  } finally {
-    setLoading(false);
-  }
-};
+    } catch (error) {
+      console.error("Verification Error:", error);
+      alert("System Error: " + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <div className="container mt-5">
+    <div className="container py-5">
       <div className="row justify-content-center">
-        <div className="col-md-5 card shadow p-4 border-0">
-          <h2 className="text-center fw-bold mb-3">Identity Verification</h2>
-          <p className="text-muted text-center small mb-4">
-            To ensure safety in the Pakistani rental market, please provide your CNIC details.
-          </p>
-          
-          <form onSubmit={handleVerify}>
-            <div className="mb-3">
-              <label className="form-label">CNIC Number (without dashes)</label>
-              <input 
-                type="text" 
-                className="form-control" 
-                placeholder="35201XXXXXXXX" 
-                maxLength="13"
-                required 
-                onChange={(e) => setCnic(e.target.value)} 
-              />
+        <div className="col-lg-6">
+          <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
+            {/* Header with Security Icon */}
+            <div className="bg-dark p-4 text-center text-white">
+              <div className="bg-primary d-inline-flex p-3 rounded-circle mb-3 shadow-sm">
+                <i className="bi bi-shield-lock-fill fs-2"></i>
+              </div>
+              <h3 className="fw-bold mb-0">Identity Verification</h3>
+              <p className="opacity-75 small mb-0 mt-2">Required for Pakistan's First Secure Rental Hub</p>
             </div>
 
-            <div className="mb-4">
-              <label className="form-label">Upload Front Side of CNIC</label>
-              <input 
-                type="file" 
-                className="form-control" 
-                accept="image/*" 
-                required 
-                onChange={(e) => setImage(e.target.files[0])} 
-              />
-              <div className="form-text">Ensure the text is clearly visible.</div>
-            </div>
+            <div className="card-body p-4 p-md-5 bg-white">
+              <form onSubmit={handleVerify}>
+                {/* CNIC Input */}
+                <div className="mb-4">
+                  <label className="form-label fw-bold small text-uppercase ls-1">CNIC Number</label>
+                  <div className="input-group">
+                    <span className="input-group-text bg-light border-0"><i className="bi bi-person-badge"></i></span>
+                    <input 
+                      type="text" 
+                      className="form-control form-control-lg bg-light border-0 fs-6" 
+                      placeholder="e.g. 3520112345678" 
+                      maxLength="13"
+                      required 
+                      value={cnic}
+                      onChange={(e) => setCnic(e.target.value.replace(/\D/g, ''))} // Only allow numbers
+                    />
+                  </div>
+                  <div className="form-text mt-2 small">
+                    <i className="bi bi-info-circle me-1"></i> Enter your 13-digit identity number without dashes.
+                  </div>
+                </div>
 
-            <button type="submit" className="btn btn-primary w-100 py-2 fw-bold" disabled={loading}>
-              {loading ? (
-                <span className="spinner-border spinner-border-sm" role="status"></span>
-              ) : "Submit for Verification"}
-            </button>
-          </form>
+                {/* File Upload */}
+                <div className="mb-4">
+                  <label className="form-label fw-bold small text-uppercase ls-1">Front-Side CNIC Photo</label>
+                  <div className={`border-2 border-dashed rounded-4 p-4 text-center transition-all ${imagePreview ? 'border-primary bg-primary-subtle' : 'bg-light border-secondary-subtle'}`}>
+                    {imagePreview ? (
+                      <div className="position-relative">
+                        <img src={imagePreview} className="img-fluid rounded-3 shadow-sm mb-2" style={{maxHeight: '150px'}} alt="CNIC Preview" />
+                        <p className="text-primary fw-bold small mb-0">File Selected ✓</p>
+                      </div>
+                    ) : (
+                      <>
+                        <i className="bi bi-cloud-arrow-up display-5 text-muted mb-2"></i>
+                        <p className="text-muted small mb-3">Upload a clear photo where text is readable.</p>
+                      </>
+                    )}
+                    <input 
+                      type="file" 
+                      className="form-control mt-2 opacity-0 position-absolute" 
+                      style={{zIndex: -1}}
+                      id="cnicUpload"
+                      accept="image/*" 
+                      required 
+                      onChange={handleImageChange} 
+                    />
+                    <label htmlFor="cnicUpload" className="btn btn-outline-dark btn-sm rounded-pill px-4">Choose File</label>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <button type="submit" className="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm mt-2" disabled={loading}>
+                  {loading ? (
+                    <><span className="spinner-border spinner-border-sm me-2"></span>Processing...</>
+                  ) : "Submit for Verification"}
+                </button>
+              </form>
+
+              <div className="mt-4 p-3 bg-light rounded-3">
+                <p className="small text-muted mb-0">
+                  <i className="bi bi-lock-fill me-1"></i> 
+                  <strong>Privacy Note:</strong> Your data is encrypted and used only for marketplace trust. We do not share your documents with other users.
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "zyra-rental"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }
