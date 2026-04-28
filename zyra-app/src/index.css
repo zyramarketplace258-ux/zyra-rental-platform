@@ -1,10 +1,11 @@
-/* Resetting the app to take up the full screen */
+/* index.css */
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   min-height: 100vh;
-  background-color: #f4f7f6; /* Professional background color */
+  /* Remove the solid color so gradients/images can show through */
+  background-color: transparent; 
   overflow-x: hidden;
 }
 
@@ -14,17 +15,11 @@ body {
   padding: 0;
 }
 
-/* Ensuring Bootstrap containers are wide on PC but have padding */
+/* Keep your professional width and card hover effects below */
 .container {
-  max-width: 1400px !important; /* Professional width for PC */
+  max-width: 1400px !important;
 }
 
-/* Smooth transitions for a "Web App" feel */
 .card {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
 }

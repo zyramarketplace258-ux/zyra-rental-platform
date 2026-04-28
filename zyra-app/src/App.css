@@ -56,3 +56,37 @@ html, body {
 main {
   width: 100%;
 }
+
+/* FORCE RESET FOR LOGIN SCREEN */
+#zyra-login-screen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important; /* Puts it above the Navbar and everything else */
+  
+  /* The Background Image */
+  background: 
+    linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), 
+    url('/login-bg.jpg') no-repeat center center !important;
+  background-size: cover !important;
+  
+  /* Emergency Backup: If image fails, this WILL turn pink */
+  background-color: pink !important; 
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 24px;
+  padding: 40px;
+  width: 90%;
+  max-width: 400px;
+  color: white;
+}
