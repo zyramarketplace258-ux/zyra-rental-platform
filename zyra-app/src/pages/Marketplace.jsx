@@ -109,6 +109,7 @@ const Marketplace = () => {
                 >
                   <div className="position-relative">
                     <img 
+                    
                       src={item.imageUrl || 'https://via.placeholder.com/400x300'} 
                       className="card-img-top" 
                       alt={item.title} 

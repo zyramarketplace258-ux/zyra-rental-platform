@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../logo/Zyra1.png'; // Ensure path is correct
+import loginBg from '../assets/login-bg.jpg';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -45,7 +46,7 @@ const Signup = () => {
       justifyContent: 'center',
       zIndex: 10000,
       // Change 'my-bg.jpg' to match your chosen image filename
-      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('/src/assets/login-jb.jpg')`,
+      backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundColor: '#0f172a'

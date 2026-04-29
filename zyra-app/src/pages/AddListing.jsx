@@ -3,6 +3,7 @@ import { db, storage, auth } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import loginBg from '../assets/login-bg.jpg';
 
 const AddListing = () => {
   const [formData, setFormData] = useState({
@@ -71,7 +72,7 @@ const AddListing = () => {
     alignItems: 'center',
     justifyContent: 'center',
     /* Inside your return's first <div> style object: */
-    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('/src/assets/login-jb.jpg')`,
+    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundColor: '#0f172a' // Dark fallback
