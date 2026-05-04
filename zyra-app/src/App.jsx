@@ -86,57 +86,70 @@ function App() {
       {/* MODULE: CONDITIONAL NAVBAR */}
       {/* We hide the navbar on Auth pages so the background looks seamless */}
       {!isAuthPage && (
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top p-0">
-          <div className="container-fluid px-lg-5">
-            <Link className="navbar-brand d-flex align-items-center fw-bold fs-3 text-primary m-0 p-0" to="/">
-              <img src={logo} alt="Zyra Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
-            </Link>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top p-0">
+          <div className="container-fluid px-lg-5">
+            <Link className="navbar-brand d-flex align-items-center m-0 p-0" to="/">
+  {/* THE LOGO */}
+  <img 
+    src={logo} 
+    alt="Zyra Logo" 
+    style={{ height: '70px', width: 'auto', objectFit: 'contain' }} 
+  />
+  
+  {/* THE TEXT */}
+  <div className="ms-2 d-flex flex-column">
+    <span className="fw-bold fs-3 text-primary lh-1">ZYRA</span>
+    <span className="text-white-50 small fw-light" style={{ fontSize: '12px', letterSpacing: '1px' }}>
+      PREMIUM RENTALS
+    </span>
+  </div>
+</Link>
 
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#zyraNav">
-              <span className="navbar-toggler-icon"></span>
-            </button>
+            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#zyraNav">
+              <span className="navbar-toggler-icon"></span>
+            </button>
 
-            <div className="collapse navbar-collapse" id="zyraNav">
-              <div className="navbar-nav ms-auto align-items-center">
-                <Link className="nav-link px-3" to="/marketplace">Browse Items</Link>
-                
-                {user ? (
-                  <>
-                    <Link className="nav-link px-3" to="/add-listing">List an Item</Link>
-                    
-                    <div className="nav-item px-2 position-relative d-flex align-items-center">
-                      <Link to="/dashboard" className="text-decoration-none">
-                         <i className={`bi fs-4 ${hasNotification ? 'bi-bell-fill text-warning bell-ring' : 'bi-bell text-white'}`}></i>
-                         {hasNotification && (
-                           <span className="position-absolute p-1 bg-danger border border-light rounded-circle notification-dot"></span>
-                         )}
-                      </Link>
-                    </div>
+            <div className="collapse navbar-collapse" id="zyraNav">
+              <div className="navbar-nav ms-auto align-items-center">
+                <Link className="nav-link px-3" to="/marketplace">Browse Items</Link>
+                
+                {user ? (
+                  <>
+                    <Link className="nav-link px-3" to="/add-listing">List an Item</Link>
+                    
+                    <div className="nav-item px-2 position-relative d-flex align-items-center">
+                      <Link to="/dashboard" className="text-decoration-none">
+                         <i className={`bi fs-4 ${hasNotification ? 'bi-bell-fill text-warning bell-ring' : 'bi-bell text-white'}`}></i>
+                         {hasNotification && (
+                           <span className="position-absolute p-1 bg-danger border border-light rounded-circle notification-dot"></span>
+                         )}
+                      </Link>
+                    </div>
 
-                    <Link className="nav-link px-3" to="/dashboard">My Dashboard</Link>
+                    <Link className="nav-link px-3" to="/dashboard">My Dashboard</Link>
 
-                    {isAdmin && (
-                      <Link className="nav-link px-3 text-warning fw-bold" to="/admin">Admin</Link>
-                    )}
-                    
-                    {!isVerified ? (
-                      <Link className="btn btn-outline-primary btn-sm ms-lg-2 px-3" to="/verify">Verify</Link>
-                    ) : (
-                      <span className="badge bg-success ms-lg-2 px-3 py-2 rounded-pill">✅ Verified</span>
-                    )}
-                    
-                    <button className="btn btn-link nav-link text-danger ms-2" onClick={handleLogout}>Logout</button>
-                  </>
-                ) : (
-                  <>
-                    <Link className="nav-link px-3" to="/login">Login</Link>
-                    <Link className="btn btn-primary ms-lg-3 px-4 rounded-pill" to="/signup">Join Zyra</Link>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </nav>
+                    {isAdmin && (
+                      <Link className="nav-link px-3 text-warning fw-bold" to="/admin">Admin</Link>
+                    )}
+                    
+                    {!isVerified ? (
+                      <Link className="btn btn-outline-primary btn-sm ms-lg-2 px-3" to="/verify">Verify</Link>
+                    ) : (
+                      <span className="badge bg-success ms-lg-2 px-3 py-2 rounded-pill">✅ Verified</span>
+                    )}
+                    
+                    <button className="btn btn-link nav-link text-danger ms-2" onClick={handleLogout}>Logout</button>
+                  </>
+                ) : (
+                  <>
+                    <Link className="nav-link px-3" to="/login">Login</Link>
+                    <Link className="btn btn-primary ms-lg-3 px-4 rounded-pill" to="/signup">Join Zyra</Link>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </nav>
       )}
 
       {/* MODULE: ROUTING SYSTEM */}

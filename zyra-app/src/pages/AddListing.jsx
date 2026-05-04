@@ -5,6 +5,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import loginBg from '../assets/login-bg.jpg';
 
+
 const AddListing = () => {
   const [formData, setFormData] = useState({
     title: '',
@@ -72,7 +73,7 @@ const AddListing = () => {
     alignItems: 'center',
     justifyContent: 'center',
     /* Inside your return's first <div> style object: */
-    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
+    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.71)), url(${loginBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundColor: '#dfe0e4' // Dark fallback
@@ -80,7 +81,7 @@ const AddListing = () => {
       <div className="container">
         <div className="row justify-content-center">
           <div className="col-lg-10"> {/* Widened slightly for better split-view */}
-            <div className="card border-0 shadow-lg rounded-4 overflow-hidden" style={{ background: '#474b8695' }}>
+            <div className="card border-0 shadow-lg rounded-4 overflow-hidden" style={{ background: '#474b860e' }}>
               <div className="row g-0">
                 
                 {/* Left Side: Image Preview / Instructions */}
@@ -161,7 +162,11 @@ const AddListing = () => {
                         <><span className="spinner-border spinner-border-sm me-2"></span>Publishing...</>
                       ) : "List Item Now"}
                     </button>
+                    
+                    
+        
                   </form>
+                  
                 </div>
 
               </div>

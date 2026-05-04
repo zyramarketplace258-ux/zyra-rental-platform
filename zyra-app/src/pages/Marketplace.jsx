@@ -46,38 +46,62 @@ const Marketplace = () => {
   return (
     <div className="container-fluid px-lg-5 mt-4 pb-5">
       {/* Search & Breadcrumb Header */}
-      <div className="bg-white p-4 rounded-4 shadow-sm mb-5 border border-light">
-        <div className="row align-items-center g-3">
-          <div className="col-lg-4">
-            <h2 className="fw-bold mb-1">Marketplace</h2>
-            <p className="text-muted small mb-0">Explore items available in {city === 'All' ? 'Pakistan' : city}</p>
-          </div>
-          <div className="col-lg-8">
-            <div className="row g-2">
-              <div className="col-md-7">
-                <div className="input-group">
-                  <span className="input-group-text bg-light border-0"><i className="bi bi-search"></i></span>
-                  <input 
-                    type="text" 
-                    className="form-control form-control-lg border-0 bg-light fs-6" 
-                    placeholder="Search anything (e.g. Camera, Drill)..." 
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div className="col-md-5">
-                <select className="form-select form-select-lg border-0 bg-light fs-6 fw-medium text-dark" onChange={(e) => setCity(e.target.value)}>
-                  <option value="All">📍 All Pakistan</option>
-                  <option value="Gujrat">Gujrat</option>
-                  <option value="Lahore">Lahore</option>
-                  <option value="Karachi">Karachi</option>
-                  <option value="Islamabad">Islamabad</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div className="p-4 rounded-4 shadow-lg mb-5 border border-secondary" style={{
+  background: 'rgba(19, 94, 214, 0.62)', // Deep slate with transparency
+  backdropFilter: 'blur(10px)',
+  WebkitBackdropFilter: 'blur(10px)',
+}}>
+  <div className="row align-items-center g-3">
+    <div className="col-lg-4">
+      <h2 className="fw-bold mb-1 text-white">Marketplace</h2>
+      <p className="text-white-50 small mb-0">Explore items available in {city === 'All' ? 'Pakistan' : city}</p>
+    </div>
+    <div className="col-lg-8">
+  <div className="row g-2">
+    {/* SEARCH INPUT */}
+    <div className="col-md-7">
+      <div className="input-group">
+        <span className="input-group-text bg-dark border-0">
+          <i className="bi bi-search text-white"></i> {/* White Icon */}
+        </span>
+        <input 
+          type="text" 
+          className="form-control form-control-lg border-0 bg-white fs-6" 
+          placeholder="Search anything..." 
+          style={{ 
+            color: 'Black', 
+            background: 'rgba(205, 24, 24, 0.3)' 
+          }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
+    </div>
+
+    {/* CITY SELECTION */}
+    <div className="col-md-5">
+      <select 
+        className="form-select form-select-lg border-0 bg-white fs-6 fw-medium" 
+        style={{ 
+          color: 'black', 
+          background: 'rgba(0,0,0,0.3)',
+          backgroundImage: "url(\"data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e\")", // Forces white dropdown arrow
+          backgroundRepeat: 'no-repeat',
+          backgroundPosition: 'right .75rem center',
+          backgroundSize: '16px 12px'
+        }}
+        onChange={(e) => setCity(e.target.value)}
+      >
+        <option value="All" className="bg-dark text-white">📍 All Pakistan</option>
+        <option value="Gujrat" className="bg-dark text-white">Gujrat</option>
+        <option value="Lahore" className="bg-dark text-white">Lahore</option>
+        <option value="Karachi" className="bg-dark text-white">Karachi</option>
+        <option value="Islamabad" className="bg-dark text-white">Islamabad</option>
+      </select>
+    </div>
+  </div>
+</div>
+  </div>
+</div>
 
       {/* Category Pills */}
       <div className="mb-4 overflow-auto d-flex gap-2 py-2 no-scrollbar">
