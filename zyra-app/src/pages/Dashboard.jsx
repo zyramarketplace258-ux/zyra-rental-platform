@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { db, auth } from '../firebase';
 import { collection, query, where, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import dashboardBg from '../assets/back.webp'; // Use your preferred image
 
 const Dashboard = () => {
   const [myItems, setMyItems] = useState([]);
@@ -63,12 +64,33 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container mt-4 pb-5">
-      {/* Top Profile Bar */}
-      <div className="bg-white rounded-4 shadow-sm p-4 mb-4 d-flex justify-content-between align-items-center">
-        <div>
-          <h5 className="text-muted mb-1 small text-uppercase fw-bold">Account</h5>
-          <h2 className="fw-bold mb-0">{user?.displayName || "Zyra User"}</h2>
+    <div style={{
+    minHeight: '100vh',
+    width: '100%',
+    backgroundImage: `linear-gradient(rgba(59, 84, 184, 0), rgba(15, 23, 42, 0.8)), url(${dashboardBg})`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed', // This keeps the image from scrolling with the content
+    paddingTop: '20px'
+  }}>
+            
+            <div className="container mt-4 pb-5">
+              {/* Top Profile Bar */}
+              <div className="bg-b rounded-4 shadow-sm p-4 mb-4 d-flex justify-content-between align-items-center"style={{
+          background: 'rgba(37, 140, 204, 0.84)', // Deep slate with transparency
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+        }}>
+                <div>
+          {/* Changed text-muted to text-white and added opacity for that "muted" look if desired */}
+          <h5 className="text-white opacity-75 mb-1 small text-uppercase fw-bold">
+            Account
+          </h5>
+          
+          {/* Added text-white here */}
+          <h2 className="text-white fw-bold mb-0">
+            {user?.displayName || "Zyra User"}
+          </h2>
         </div>
         <div>
           {profile?.isVerified ? (
@@ -85,10 +107,10 @@ const Dashboard = () => {
         <div className="col-lg-8">
           
           {/* 1. INCOMING REQUESTS (FOR OWNER) */}
-          <div className="card border-0 shadow-sm rounded-4 mb-4">
-            <div className="card-header bg-white border-0 py-3">
-              <h5 className="fw-bold mb-0 text-primary"><i className="bi bi-download me-2"></i>Incoming Requests</h5>
-            </div>
+          <div className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)' }}>
+  <div className="card-header border-0 py-3" style={{ background: 'rgba(37, 140, 204, 0.84)', color: 'white' }}>
+    <h5 className="fw-bold mb-0 text-white"><i className="bi bi-download me-2"></i>Incoming Requests</h5>
+  </div>
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table align-middle mb-0">
@@ -138,10 +160,10 @@ const Dashboard = () => {
           </div>
 
           {/* 2. MY RENTAL BOOKINGS (FOR RENTER) */}
-          <div className="card border-0 shadow-sm rounded-4 mb-4">
-            <div className="card-header bg-white border-0 py-3">
-              <h5 className="fw-bold mb-0 text-info"><i className="bi bi-send me-2"></i>My Bookings (Sent)</h5>
-            </div>
+          <div className="card border-0 shadow-lg rounded-4 mb-4 overflow-hidden" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)' }}>
+  <div className="card-header border-0 py-3" style={{ background: 'rgba(37, 140, 204, 0.84)' }}>
+    <h5 className="fw-bold mb-0 text-white"><i className="bi bi-send me-2"></i>My Bookings (Sent)</h5>
+  </div>
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table align-middle mb-0">
@@ -176,23 +198,23 @@ const Dashboard = () => {
           </div>
 
           {/* 3. INVENTORY */}
-          <div className="card border-0 shadow-sm rounded-4 p-4">
-            <h5 className="fw-bold mb-3">Inventory</h5>
-            <div className="row g-3">
-              {myItems.map(item => (
-                <div key={item.id} className="col-md-6">
-                  <div className="d-flex align-items-center border rounded-4 p-2 bg-light">
-                    <img src={item.imageUrl} alt="" className="rounded-3" style={{width: '50px', height: '50px', objectFit: 'cover'}} />
-                    <div className="ms-3 flex-grow-1 overflow-hidden">
-                      <h6 className="mb-0 text-truncate fw-bold small">{item.title}</h6>
-                    </div>
-                    {/* DELETE BUTTON FOR LISTING */}
-                    <button onClick={() => deleteListing(item.id)} className="btn btn-link text-danger p-1"><i className="bi bi-trash-fill"></i></button>
-                  </div>
-                </div>
-              ))}
-            </div>
+          {/* 3. INVENTORY */}
+<div className="card border-0 shadow-lg rounded-4 p-4" style={{ background: 'rgba(37, 140, 204, 0.84)', border: '1px solid rgba(3, 19, 249, 0.3)' }}>
+  <h5 className="fw-bold mb-3 text-white">Inventory</h5>
+  <div className="row g-3">
+    {myItems.map(item => (
+      <div key={item.id} className="col-md-6">
+        <div className="d-flex align-items-center border-0 rounded-4 p-2" style={{ background: 'rgba(255,255,255,0.1)' }}>
+          <img src={item.imageUrl} alt="" className="rounded-3" style={{width: '50px', height: '50px', objectFit: 'cover'}} />
+          <div className="ms-3 flex-grow-1 overflow-hidden">
+            <h6 className="mb-0 text-truncate fw-bold small text-white">{item.title}</h6>
           </div>
+          <button onClick={() => deleteListing(item.id)} className="btn btn-link text-danger p-1"><i className="bi bi-trash-fill"></i></button>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
         </div>
 
         {/* Right Stats Column */}
@@ -203,6 +225,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

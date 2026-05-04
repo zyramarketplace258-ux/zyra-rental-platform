@@ -78,7 +78,7 @@ const Home = () => {
 
       {/* Premium Hero Section */}
       <div className="position-relative overflow-hidden" style={{ 
-        backgroundImage: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4)), url("https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1500&q=80")',
+        backgroundImage: 'linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4)), url("https://t4.ftcdn.net/jpg/18/51/78/81/360_F_1851788169_jFOEuXVfsNPpCBnZKSo15tkWnUR6pE6S.jpg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '85vh',

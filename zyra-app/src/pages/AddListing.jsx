@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { db, storage, auth } from '../firebase';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import loginBg from '../assets/login-bg.jpg';
+import { doc, getDoc, addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { useNavigate, Link } from 'react-router-dom';
+import loginBg from '../assets/back.webp';
 
 
 const AddListing = () => {
@@ -28,36 +28,62 @@ const AddListing = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!image) return alert("Please upload an image of the item.");
-    if (!auth.currentUser) return alert("You must be logged in to list an item.");
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Basic validation to ensure an image is selected
+  if (!image) {
+    alert("Please upload an image!");
+    return;
+  }
+
+  setLoading(true);
+
+  try {
+    // 1. FETCH the user's verification status
+    const userDocRef = doc(db, "users", auth.currentUser.uid);
+    const userSnap = await getDoc(userDocRef);
+    const isActuallyVerified = userSnap.exists() ? userSnap.data().isVerified : false;
+
+    // 2. UPLOAD the image to Firebase Storage
+    const storageRef = ref(storage, `products/${Date.now()}_${image.name}`);
+    const uploadTask = await uploadBytes(storageRef, image);
     
-    setLoading(true);
+    // 3. GET the actual URL from the upload task
+    const imageUrl = await getDownloadURL(uploadTask.ref);
 
-    try {
-      const imageRef = ref(storage, `products/${Date.now()}_${image.name}`);
-      await uploadBytes(imageRef, image);
-      const url = await getDownloadURL(imageRef);
+    // 4. SAVE the document to Firestore
+    await addDoc(collection(db, "listings"), {
+      title: formData.title,
+      price: Number(formData.price),
+      location: formData.location,
+      category: formData.category,
+      description: formData.description,
+      
+      // Use the 'imageUrl' variable we just created above
+      imageUrl: imageUrl, 
+      
+      ownerId: auth.currentUser.uid,
+      ownerName: auth.currentUser.displayName || "User1",
+      
+      // This makes the badge turn green in Marketplace.jsx
+      ownerVerified: isActuallyVerified, 
+      
+      status: "available",
+      createdAt: serverTimestamp()
+    });
 
-      await addDoc(collection(db, "listings"), {
-        ...formData,
-        price: Number(formData.price),
-        imageUrl: url,
-        ownerId: auth.currentUser.uid,
-        ownerName: auth.currentUser.displayName || "Verified Owner",
-        status: "available",
-        createdAt: serverTimestamp()
-      });
-
-      alert("Success! Your item is now live on Zyra.");
-      navigate('/marketplace'); 
-    } catch (error) {
-      console.error(error);
-      alert("Error: " + error.message);
-    }
+    console.log("Listing created successfully!");
+    navigate('/marketplace');
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Failed to create listing: " + error.message);
+  } finally {
     setLoading(false);
-  };
+  }
+};
 
 
   return (
@@ -73,15 +99,23 @@ const AddListing = () => {
     alignItems: 'center',
     justifyContent: 'center',
     /* Inside your return's first <div> style object: */
-    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.71)), url(${loginBg})`,
+    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.71)), url(${loginBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundColor: '#dfe0e4' // Dark fallback
     }}>
       <div className="container">
+        
         <div className="row justify-content-center">
-          <div className="col-lg-10"> {/* Widened slightly for better split-view */}
-            <div className="card border-0 shadow-lg rounded-4 overflow-hidden" style={{ background: '#474b860e' }}>
+          <div className="col-lg-7"> {/* Widened slightly for better split-view */}
+            <div className="card border-0 shadow-lg rounded-4 overflow-hidden position-relative" style={{ background: '#474b860e' }}>
+              <button 
+  type="button"
+  onClick={() => navigate('/marketplace')}
+  className="btn-close btn-close-red position-absolute top-0 end-0 m-3" 
+  style={{ zIndex: 10, filter: 'invert(1)' }} 
+  aria-label="Close"
+></button>
               <div className="row g-0">
                 
                 {/* Left Side: Image Preview / Instructions */}
@@ -126,6 +160,12 @@ const AddListing = () => {
                           <option value="Household">Household</option>
                           <option value="Vehicle">Vehicle</option>
                           <option value="Event/Party">Event/Party</option>
+                          <option value="Decorations">Decorations</option>
+                          <option value="Books">Books</option>
+                          <option value="Clothes">Clothes</option>
+                          <option value="Camera">Camera</option>
+                          <option value="Bikes">Bikes</option>
+                        
                         </select>
                       </div>
                       <div className="col-md-6 mb-3">

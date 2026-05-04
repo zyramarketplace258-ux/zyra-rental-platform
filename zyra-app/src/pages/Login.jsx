@@ -3,7 +3,7 @@ import { auth } from '../firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
 import logo from '../logo/Zyra1.png'; // Updated to match your logo path
-import loginBg from '../assets/login-bg.jpg';
+import loginBg from '../assets/back.webp';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -34,7 +34,7 @@ return (
     /* Inside your return's first <div> style object: */
     
   //  backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url('/src/assets/login-bg.jpg')`,
-    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
+    backgroundImage: `linear-gradient(rgba(15, 23, 42, 0), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundColor: '#0f172a' // Dark fallback

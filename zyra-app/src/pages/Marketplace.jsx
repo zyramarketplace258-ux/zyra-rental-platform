@@ -47,7 +47,7 @@ const Marketplace = () => {
     <div className="container-fluid px-lg-5 mt-4 pb-5">
       {/* Search & Breadcrumb Header */}
       <div className="p-4 rounded-4 shadow-lg mb-5 border border-secondary" style={{
-  background: 'rgba(19, 94, 214, 0.62)', // Deep slate with transparency
+  background: 'rgb(139, 22, 163)', // Deep slate with transparency
   backdropFilter: 'blur(10px)',
   WebkitBackdropFilter: 'blur(10px)',
 }}>
@@ -104,20 +104,31 @@ const Marketplace = () => {
 </div>
 
       {/* Category Pills */}
-      <div className="mb-4 overflow-auto d-flex gap-2 py-2 no-scrollbar">
-        {['All', 'Tools', 'Electronics', 'Vehicles', 'Furniture', 'Machinery'].map(cat => (
-          <button 
-            key={cat} 
-            onClick={() => setCategory(cat)} 
-            className={`btn px-4 rounded-pill fw-bold transition-all btn-sm ${
-              category === cat ? 'btn-primary shadow-sm' : 'btn-white border bg-white text-muted'
-            }`}
-          >
-            {cat}
-          </button>
-        ))}
-      </div>
-
+<div className="mb-4 overflow-auto d-flex gap-2 py-2 no-scrollbar">
+  {[
+    'All', 
+    'Tools', 
+    'Electronics', 
+    'Household', 
+    'Vehicle', 
+    'Event/Party', 
+    'Decorations', 
+    'Books', 
+    'Clothes', 
+    'Camera', 
+    'Bikes'
+  ].map(cat => (
+    <button 
+      key={cat} 
+      onClick={() => setCategory(cat)} 
+      className={`btn px-4 rounded-pill fw-bold transition-all btn-sm ${
+        category === cat ? 'btn-primary shadow-sm' : 'btn-white border bg-white text-muted'
+      }`}
+    >
+      {cat}
+    </button>
+  ))}
+</div>
       {/* Results Grid */}
       {loading ? (
         <div className="text-center py-5"><div className="spinner-border text-primary"></div></div>
