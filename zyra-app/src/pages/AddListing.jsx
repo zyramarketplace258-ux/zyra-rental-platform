@@ -75,7 +75,7 @@ const AddListing = () => {
     backgroundImage: `linear-gradient(rgba(15, 23, 42, 0.7), rgba(15, 23, 42, 0.8)), url(${loginBg})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
-    backgroundColor: '#0f172a' // Dark fallback
+    backgroundColor: '#dfe0e4' // Dark fallback
     }}>
       <div className="container">
         <div className="row justify-content-center">
@@ -97,7 +97,7 @@ const AddListing = () => {
                         <span style={{ fontSize: '2rem' }}>📸</span>
                       </div>
                       <h4 className="fw-bold">Show it off!</h4>
-                      <p className="small opacity-75">Upload a clear photo of your item to attract more renters.</p>
+                      <p className="small opacity-75 ">Upload a clear photo of your item to attract more renters.</p>
                     </div>
                   )}
                 </div>
@@ -106,19 +106,19 @@ const AddListing = () => {
                 <div className="col-md-7 p-4 p-md-5">
                   <div className="d-flex align-items-center mb-4">
                     <div className="bg-primary rounded-circle me-3" style={{ width: '20px', height: '20px' }}></div>
-                    <h2 className="m-0 fw-bold">List an Item</h2>
+                    <h2 className="m-0 fw-bold text-white">List an Item</h2>
                   </div>
                   
                   <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                      <label className="form-label fw-semibold text-secondary small">What are you renting?</label>
+                      <label className="form-label fw-semibold text-secondary small text-white">What are you renting?</label>
                       <input type="text" className="form-control bg-light border-0 py-2" placeholder="e.g. DSLR Camera, Ladder, Drill" required 
                         onChange={(e) => setFormData({...formData, title: e.target.value})} />
                     </div>
 
                     <div className="row">
                       <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold text-secondary small">Category</label>
+                        <label className="form-label fw-semibold text-secondary small text-white">Category</label>
                         <select className="form-select bg-light border-0 py-2" onChange={(e) => setFormData({...formData, category: e.target.value})}>
                           <option value="Tools">Tools</option>
                           <option value="Electronics">Electronics</option>
@@ -128,14 +128,14 @@ const AddListing = () => {
                         </select>
                       </div>
                       <div className="col-md-6 mb-3">
-                        <label className="form-label fw-semibold text-secondary small">Price / Day (Rs.)</label>
+                        <label className="form-label fw-semibold text-secondary small text-white">Price / Day (Rs.)</label>
                         <input type="number" className="form-control bg-light border-0 py-2" placeholder="500" required 
                           onChange={(e) => setFormData({...formData, price: e.target.value})} />
                       </div>
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label fw-semibold text-secondary small">Pickup City</label>
+                      <label className="form-label fw-semibold text-secondary small text-white">Pickup City</label>
                       <select className="form-select bg-light border-0 py-2" defaultValue="Gujrat" onChange={(e) => setFormData({...formData, location: e.target.value})}>
                         <option value="Gujrat">Gujrat</option>
                         <option value="Lahore">Lahore</option>
@@ -145,13 +145,13 @@ const AddListing = () => {
                     </div>
 
                     <div className="mb-3">
-                      <label className="form-label fw-semibold text-secondary small">Quick Description</label>
+                      <label className="form-label fw-semibold text-secondary small text-white">Quick Description</label>
                       <textarea className="form-control bg-light border-0" rows="3" placeholder="Condition, items included, or special rules..." 
                         onChange={(e) => setFormData({...formData, description: e.target.value})}></textarea>
                     </div>
 
                     <div className="mb-4">
-                      <label className="form-label fw-semibold text-secondary small">Upload Photo</label>
+                      <label className="form-label fw-semibold text-secondary small text-white">Upload Photo</label>
                       <input type="file" className="form-control border-0 bg-light py-2" accept="image/*" required 
                         onChange={handleImageChange} />
                     </div>

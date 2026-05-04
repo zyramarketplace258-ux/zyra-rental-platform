@@ -86,7 +86,7 @@ function App() {
       {/* MODULE: CONDITIONAL NAVBAR */}
       {/* We hide the navbar on Auth pages so the background looks seamless */}
       {!isAuthPage && (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top p-0">
+          <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top p-0">
           <div className="container-fluid px-lg-5">
             <Link className="navbar-brand d-flex align-items-center fw-bold fs-3 text-primary m-0 p-0" to="/">
               <img src={logo} alt="Zyra Logo" style={{ height: '70px', width: 'auto', objectFit: 'contain' }} />
