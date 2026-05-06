@@ -63,7 +63,7 @@ const VerifyIdentity = () => {
         });
       }
 
-      alert("CNIC Submitted! Our team will review your identity shortly.");
+     // alert("CNIC Submitted! Our team will review your identity shortly.");
       navigate('/dashboard');
 
     } catch (error) {
