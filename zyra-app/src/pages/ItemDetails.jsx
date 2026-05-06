@@ -94,7 +94,7 @@ const ItemDetails = () => {
       
       setRequestStatus("pending");
       setRentalId(docRef.id);
-      alert("Request Sent!");
+    //  alert("Request Sent!");
     } catch (err) {
       alert("Error: " + err.message);
     }

@@ -42,17 +42,15 @@ const Dashboard = () => {
     }
   };
 
-  const deleteRequest = async (requestId, type) => {
-    const message = type === 'sent' ? "Cancel this rental request?" : "Remove this request from your history?";
-    if (window.confirm(message)) {
-      try {
-        await deleteDoc(doc(db, "rentals", requestId));
-      } catch (error) {
-        alert("Error: " + error.message);
-      }
-    }
-  };
-
+  const deleteRequest = async (requestId) => {
+  try {
+    // This executes immediately without asking the user
+    await deleteDoc(doc(db, "rentals", requestId));
+  } catch (error) {
+    // Log the error to the console instead of an alert for a cleaner UI
+    console.error("Error deleting request:", error.message);
+  }
+};
   const deleteListing = async (itemId) => {
     if (window.confirm("Permanently delete this item from the marketplace?")) {
       try {
