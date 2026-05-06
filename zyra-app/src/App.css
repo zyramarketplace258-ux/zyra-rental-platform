@@ -67,7 +67,7 @@ main {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  z-index: 9999 !important; /* Puts it above the Navbar and everything else */
+  z-index: 9999 !important; /* Puts it above the Navbar and everything else *
   
   /* The Background Image */
   background: 

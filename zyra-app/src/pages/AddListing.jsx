@@ -75,7 +75,7 @@ const handleSubmit = async (e) => {
       createdAt: serverTimestamp()
     });
 
-    console.log("Listing created successfully!");
+  //  console.log("Listing created successfully!");
     navigate('/marketplace');
   } catch (error) {
     console.error("Error:", error);
